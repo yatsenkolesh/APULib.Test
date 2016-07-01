@@ -1,0 +1,22 @@
+{
+  "name": "wouterrr/mangodb",
+  "type": "kohana-module",
+  "description": "MongoDB for Kohana",
+  "keywords": ["kohana", "mongodb"],
+  "homepage": "https://github.com/Wouterrr/MangoDB",
+  "license": "BEER-WARE",
+  "authors": [
+    {
+      "name": "Wouter Wiegmans"
+    }
+  ],
+  "support": {
+    "issues":   "https://github.com/Wouterrr/MangoDB/issues",
+    "source":   "https://github.com/Wouterrr/MangoDB"
+  },
+  "require": {
+    "composer/installers": "~1.0",
+    "kohana/core": ">=3.3",
+    "php": ">=5.3.0"
+  }
+}
