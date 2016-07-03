@@ -13,7 +13,7 @@ class Controller_User extends Controller_Common
 		if($this->request->post('login'))
 		{
 			$auth = $this->user->auth($this->request->post('login'), $this->request->post('pwd'));
-			$this->addMessage($this->messagesTexts[($auth ? 'USER_SUCCESS_AUTH' : 'USER_FAIL_AUTH')]);
+			HTTP::redirect(Model_Tools::getUrl('tracks', 'Index'));
 		}
 		
 		$this->showTemplate('User/Auth', array(
@@ -33,17 +33,27 @@ class Controller_User extends Controller_Common
 		if($this->request->post('login'))
 		{
 			
+			//Example of use Validation
+			
 			$post = Validation::factory($_POST);
 			
-			$errors = $post	-> rule('login', 'not_empty')
+			$post	-> rule('login', 'not_empty')
 					-> rule('login', 'min_length', array(':value', 2))
 					-> rule('login', 'max_length', array(':value', 30))
 					-> check()
 					;
+			$errors = $post->errors();	
 			
-			if($post->errors())
+			$errorsToDisplay = array();
+			
+			foreach($errors as $key => $field)
 			{
-				$this->addMessage('Не правильная длина логина');
+				$errorsToDisplay[] = $key . '_' .$field[0];
+			}
+						
+			if($errors)
+			{
+				$this->addMessage($errorsToDisplay);
 			}
 			else
 			{
@@ -63,6 +73,19 @@ class Controller_User extends Controller_Common
 		));
 
 		return 1;
+	}
+	
+	public function action_bookmarks()
+	{
+		if(!Model_User::isLogged())
+			return HTTP::redirect('/');
+		
+		$this->showTemplate('User/Bookmarks', array(
+			'isPageDefaultTemplate' => TRUE,
+			'tracks' => Model_Bookmarks::instance()->get()
+		));
+		
+		return ;
 	}
 	
 	public function action_logout()

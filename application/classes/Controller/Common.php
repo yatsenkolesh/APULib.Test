@@ -11,6 +11,7 @@ abstract class Controller_Common extends Controller
 	protected $user;
 	protected $mangodb;
 	protected $session;
+	protected $language;
 	
 	function __construct(Request $request, Response $response)
 	{
@@ -26,6 +27,8 @@ abstract class Controller_Common extends Controller
 		$this->user = Model_User::instance();
 		$this->mangodb = MangoDB::instance();
 		$this->session = Session::instance();
+		$this->language = Model_Language::instance($this->request->param('language'));
+		
 		return ;
 	}
 	
@@ -41,6 +44,17 @@ abstract class Controller_Common extends Controller
 	
 	protected function addMessage($message, $code = 0, $getFromErrors = 0)
 	{	
+		if(is_array($message) && !$getFromErrors)
+		{
+			//!!! sorry for messages = message :( !!!
+			$messages = $message;
+			foreach($messages as $message)
+			{
+				$this->messages[] = compact('message', 'code');
+			}
+			return 1;
+		}
+	
 		if($getFromErrors && is_array($message))
 		{
 			foreach($message as $messageCode)

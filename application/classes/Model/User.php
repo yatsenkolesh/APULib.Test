@@ -49,7 +49,19 @@ class Model_User extends Model_ORM
 		)), 'single');	
 	}
 	
-	//Нужно было ошибки в отдельный класс вынести(
+	/**
+	* Find user with current id
+	* @param id string
+	* @return array
+	*/
+	public function getUserById($id)
+	{
+		return $this->mangoDB->fetchArray($this->mangoDB->find(self::DB_COLLECTION, array(
+			$this->getDBField('id') => $id
+		)), 'single');	
+	}
+	
+	//Нужно было ошибки в отдельный класс вынести для ошибок(
 	private function addError($errText)
 	{
 		$this->errors [] = $errText;
@@ -115,6 +127,11 @@ class Model_User extends Model_ORM
 	public static function isLogged()
 	{
 		return Session::instance()->get(self::SESSION_LOGIN_KEY);
+	}
+	
+	public function getCurrentUserId()
+	{
+		return Arr::get($this->getUserByLogin(Session::instance()->get(self::SESSION_LOGIN_KEY)), 'id', 0);
 	}
 	
 	public function logout()

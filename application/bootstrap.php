@@ -129,7 +129,8 @@ Kohana::modules(array(
 	// 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
-	'mangodb' => MODPATH. 'mangodb'
+	'mangodb' => MODPATH. 'mangodb',
+	'tracks8'  => MODPATH.'tracks8',  // User guide and API documentation
 	));
 
 /**
@@ -145,8 +146,9 @@ Kohana::modules(array(
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
-Route::set('default', '(<controller>(/<action>(/<id>)))')
+Route::set('default', '(<language>/(<controller>(/<action>(/<id>))))')
 	->defaults(array(
 		'controller' => 'Index',
 		'action'     => 'index',
+		'language' => 'ru'
 	));

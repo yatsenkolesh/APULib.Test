@@ -13,10 +13,12 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="/public/css/bootstrap.min.css" rel="stylesheet">
-
+	
     <!-- Custom CSS -->
-    <link href="/public/css/shop-homepage.css" rel="stylesheet">
-
+    <link href="/public/css/style.css" rel="stylesheet">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -27,6 +29,8 @@
 </head>
 
 <body>
+
+<div style="display:none;" id="language-code"><?=Model_Language::instance()->getCurrentLanguage()?></div>
 
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -53,8 +57,29 @@
                     <li>
                         <a href="<?=Model_Tools::getUrl('user', 'logout')?>"><?=__('Выйти')?></a>
                     </li>
+					<li>
+                        <a href="<?=Model_Tools::getUrl('user', 'bookmarks')?>"><?=__('Мне понравилось')?></a>
+                    </li>
 				<?php endif;?>
+				
                 </ul>
+								
+				<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+				  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				  <img src="/public/images/flags/<?=Model_Language::instance()->getCurrentLanguage()?>.png" alt="Language flag" width="20" height="20">
+				  <span class="caret"></span></a>
+				  <ul class="dropdown-menu" role="menu">
+					<?php foreach(Model_Language::instance()->list as $language):?>
+					<?php if(Model_Language::instance()->getCurrentLanguage() == $language)
+						continue;
+					?>
+					
+					<li><a href="<?= Model_Language::instance()->getUrlToSwitchLanguage($language, URL::base(true).Request::current()->uri().URL::query())?>"><img src="/public/images/flags/<?=$language?>.png" alt="Language flag" width="20" height="20"></a></li>
+					<?php endforeach; ?>
+				  </ul>
+				</li>
+				</ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
