@@ -18,7 +18,10 @@ class MangoDB extends Kohana_MangoDB {
 		foreach($a as $key=>$val)
 		{
 			if($val == self::AUTO_INCREMENT)
-				$a[$key] = $this->getIncrement($collection_name, $key);
+			{
+				$increment = $this->getIncrement($collection_name, $key);
+				$a[$key] = $increment;
+			}
 		}
 		
 		return $this->_call('insert', array(
@@ -29,21 +32,29 @@ class MangoDB extends Kohana_MangoDB {
 	
 	private function getIncrement($collection_name, $key)
 	{
-		$lastEntry = $this->getLastEntry($collection_name);
-		if(!$lastEntry)
+		$incField = $collection_name. '_'. $key;
+		
+		$incrs = $this->find('increments', array('field' => $incField));
+		
+		foreach($incrs as $incr)
+			{}
+		
+		if(isset($incr))
+		{
+			$incrID = ($incr['value'] + 1);
+			$this->update('increments', array('field' => $incField), array('$set' => array("value" => $incrID)));
+			return $incrID;
+		}
+		else
+		{
+			$this->insert('increments', array(
+				'field' => $incField,
+				'value' => 1
+			));
 			return 1;
-		$incr = intval($lastEntry[$key]) + 1;
-		return $incr;
+		}
 	}
 	
-	private function getLastEntry($collection_name)
-	{
-		$entries = $this->find($collection_name);
-		foreach($entries as $lastValue){}
-		if(!isset($lastValue))
-			return FALSE;
-		return $lastValue;
-	}
 	
 	public function fetchArray($query, $param = 0)
 	{
